@@ -1,0 +1,14 @@
+name: mcq_scanner
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - kivy=2.3.1
+  - numpy=2.3.4
+  - beautifulsoup4=4.14.2
+  - requests=2.32.5
+  - pip
+  - pip:
+      - easyocr==1.7.2
+      - googlesearch_python==1.3.0
