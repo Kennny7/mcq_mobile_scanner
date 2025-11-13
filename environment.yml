@@ -12,3 +12,4 @@ dependencies:
   - pip:
       - easyocr==1.7.2
       - googlesearch_python==1.3.0
+      - kivymd==1.2.0
