@@ -27,4 +27,5 @@ Thumbs.db
 
 # build / dist folders
 build/
-dist/
+dist/".buildozer/" 
+"miniconda.sh" 
