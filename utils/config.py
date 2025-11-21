@@ -2,12 +2,17 @@
 class MobileConfig:
     # Camera settings
     CAMERA_RESOLUTION = (640, 480)  # Lower for mobile performance
-    STABLE_TIME_THRESHOLD = 3.0
     PROCESSING_INTERVAL = 0.5  # Seconds between frame processing
     
-    # OCR settings
-    OCR_CONFIDENCE_THRESHOLD = 0.6
+    # OCR.Space API settings
+    OCR_SPACE_API_KEY = "K83498410088957"  # Free API key - get from https://ocr.space/ocrapi
+    OCR_CONFIDENCE_THRESHOLD = 0.5
     TEXT_MIN_LENGTH = 20
+    
+    # Capture modes
+    AUTO_CAPTURE_INTERVAL = 2.0  # Seconds between auto-captures
+    MANUAL_MODE = "manual"
+    AUTO_MODE = "auto"
     
     # Search settings
     MAX_SEARCH_RESULTS = 3

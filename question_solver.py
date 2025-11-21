@@ -3,12 +3,14 @@ from googlesearch import search
 import requests
 from bs4 import BeautifulSoup
 import re
+from utils.logger import app_logger
+from utils.config import MobileConfig
 
 class QuestionSolver:
     def __init__(self):
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36'
         })
     
     def search_question(self, question, options):
@@ -19,8 +21,8 @@ class QuestionSolver:
             # Get search results
             search_results = list(search(
                 search_query, 
-                num_results=AppConfig.MAX_SEARCH_RESULTS,
-                timeout=AppConfig.SEARCH_TIMEOUT
+                num_results=MobileConfig.MAX_SEARCH_RESULTS,
+                timeout=MobileConfig.SEARCH_TIMEOUT
             ))
             
             # Analyze each result
@@ -28,6 +30,7 @@ class QuestionSolver:
             return answers
             
         except Exception as e:
+            app_logger.error(f"Search error: {str(e)}")
             return {"error": str(e)}
     
     def analyze_results(self, urls, question, options):
@@ -45,7 +48,8 @@ class QuestionSolver:
                         answer_counts[answer] += 1
                         total_matches += 1
                         
-            except Exception:
+            except Exception as e:
+                app_logger.warning(f"Failed to analyze {url}: {str(e)}")
                 continue
         
         # Return answers with confidence
@@ -92,7 +96,7 @@ class QuestionSolver:
             ]
             
             for pattern in answer_patterns:
-                if re.search(pattern, content_lower):
+                if re.search(pattern, content_lower, re.IGNORECASE):
                     found_answers.append(option)
         
         return found_answers
