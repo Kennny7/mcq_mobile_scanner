@@ -1,6 +1,7 @@
 # mobile_camera.py
 from kivy.uix.camera import Camera
 from kivy.clock import Clock
+from kivy.graphics.texture import Texture
 import time
 from utils.logger import app_logger
 from utils.config import MobileConfig
@@ -9,21 +10,19 @@ class MobileCameraController:
     def __init__(self):
         self.camera = None
         self.is_camera_available = False
-        self.last_stable_time = 0
         self.current_frame = None
         self.frame_counter = 0
-        self.is_processing = False
+        self.capture_callback = None
         
         app_logger.info("MobileCameraController initialized")
     
     def initialize_camera(self):
         """Initialize mobile camera with error handling"""
         try:
-            from kivy.uix.camera import Camera
-            
             self.camera = Camera(
                 resolution=MobileConfig.CAMERA_RESOLUTION,
-                play=True
+                play=True,
+                index=0  # Use back camera
             )
             self.is_camera_available = True
             app_logger.info("Camera initialized successfully")
@@ -35,39 +34,67 @@ class MobileCameraController:
             return False
     
     def capture_frame(self):
-        """Capture frame from camera with performance optimization"""
-        if not self.is_camera_available or self.is_processing:
-            return None
-        
-        # Skip frames for performance
-        self.frame_counter += 1
-        if self.frame_counter % MobileConfig.FRAME_SKIP_COUNT != 0:
+        """Capture current frame as image data"""
+        if not self.is_camera_available or not self.camera.texture:
             return None
         
         try:
-            if self.camera and self.camera.texture:
-                self.current_frame = self.camera.texture
-                return self.current_frame
+            # Get texture data
+            texture = self.camera.texture
+            buffer = texture.pixels
+            return buffer, texture.size
+            
         except Exception as e:
             app_logger.error(f"Frame capture error: {str(e)}")
+            return None
+    
+    def capture_image(self):
+        """Capture image and return as bytes for OCR"""
+        frame_data = self.capture_frame()
+        if frame_data:
+            buffer, size = frame_data
+            # Convert texture to JPEG bytes
+            from PIL import Image
+            import io
+            
+            # Convert buffer to PIL Image
+            image = Image.frombytes('RGBA', size, buffer)
+            # Convert to RGB and then to JPEG bytes
+            rgb_image = image.convert('RGB')
+            
+            img_byte_arr = io.BytesIO()
+            rgb_image.save(img_byte_arr, format='JPEG', quality=85)
+            img_byte_arr.seek(0)
+            
+            app_logger.info("Image captured successfully")
+            return img_byte_arr.getvalue()
         
         return None
     
-    def check_stability(self):
-        """Check if camera is stable for processing"""
-        current_time = time.time()
-        
-        # Simulate stability check (in real app, compare frames)
-        if current_time - self.last_stable_time > MobileConfig.STABLE_TIME_THRESHOLD:
-            self.last_stable_time = current_time
-            app_logger.info("Camera stability detected - ready for processing")
-            return True
-        
-        return False
+    def set_capture_callback(self, callback):
+        """Set callback for auto-capture mode"""
+        self.capture_callback = callback
+    
+    def start_auto_capture(self):
+        """Start automatic capture at intervals"""
+        if self.capture_callback:
+            Clock.schedule_interval(self.auto_capture, MobileConfig.AUTO_CAPTURE_INTERVAL)
+    
+    def stop_auto_capture(self):
+        """Stop automatic capture"""
+        Clock.unschedule(self.auto_capture)
+    
+    def auto_capture(self, dt):
+        """Auto-capture callback"""
+        if self.capture_callback:
+            image_data = self.capture_image()
+            if image_data:
+                self.capture_callback(image_data)
     
     def stop_camera(self):
         """Stop camera and cleanup"""
         if self.camera:
             self.camera.play = False
             self.is_camera_available = False
+            self.stop_auto_capture()
             app_logger.info("Camera stopped")
