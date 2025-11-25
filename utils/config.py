@@ -18,7 +18,17 @@ class MobileConfig:
     MAX_SEARCH_RESULTS = 3
     SEARCH_TIMEOUT = 15
     CACHE_DURATION = 300  # Cache results for 5 minutes
+
+    # Gemini API Configuration
+    GEMINI_API_KEY = "AIzaSyAoDZwvZ3bZIzdojU_L_dEvgF2kEeWZf_k" 
+    GEMINI_MODEL = "gemini-pro"  # or "gemini-1.5-pro" if available
+    GEMINI_TIMEOUT = 30  # seconds
+    GEMINI_MAX_RETRIES = 2
     
+    # Answer confidence thresholds
+    GEMINI_MIN_CONFIDENCE = 0.7
+    SEARCH_FALLBACK_ENABLED = True
+
     # UI settings
     FONT_SIZE_SMALL = 14
     FONT_SIZE_MEDIUM = 18

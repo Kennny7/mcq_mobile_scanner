@@ -70,7 +70,7 @@ class TextProcessor:
                 continue
                 
             # Check if this line starts an option (A), B), etc.)
-            option_match = re.match(r'^([A-D])[\.\s\)]\s*(.*)', line, re.IGNORECASE)
+            option_match = re.match(r'^([A-E])[\.\s\)]\s*(.*)', line, re.IGNORECASE)
             if option_match:
                 found_first_option = True
                 
