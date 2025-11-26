@@ -2,25 +2,25 @@ name: mcq_scanner_ws
 channels:
   - conda-forge
   - defaults
+
 dependencies:
   - python=3.10
   - pip
   - kivy=2.3.1
-  - numpy=1.26.4 #numpy=2.3.4
   - requests=2.32.5
   - beautifulsoup4=4.14.2
-  - pillow=12.0.0
-  - scipy=1.15.3
-  - scikit-image=0.25.2
+  - pillow=8.4.0
   - setuptools
+  - certifi=2025.10.5
+  - charset-normalizer=3.4.4
+  - urllib3=2.5.0
+  - idna=3.11
+  - soupsieve=2.8
+  - protobuf=5.29.5
+  - typing-extensions=4.15.0
+
   - pip:
       - kivymd==1.2.0
-      - easyocr==1.7.2
       - googlesearch-python==1.3.0
-      - torch==2.9.0
-      - torchvision==0.24.0
-      - opencv-python-headless==4.12.0.88
-      - buildozer==1.5.0
-      - jinja2==3.1.6
-      - filelock==3.20.0
-      - virtualenv==20.35.4
+      - google-generativeai==0.8.5
+      - python_dotenv==1.2.1
