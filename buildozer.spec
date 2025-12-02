@@ -48,7 +48,7 @@ requirements = python3,kivy==2.3.1,kivymd==1.2.0,requests==2.32.5,beautifulsoup4
 presplash.filename = %(source.dir)s/assets/presplash.png
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/assets/icon.png
+icon.filename = %(source.dir)s/assets/icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -88,7 +88,8 @@ fullscreen = 0
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
-android.permissions = INTERNET,CAMERA,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
+#android.permissions = INTERNET,CAMERA,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
+android.permissions = INTERNET,CAMERA,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION
 
 # (list) Features (adds uses-feature - tags to manifest)
 #android.features = camera
@@ -224,7 +225,8 @@ android.entrypoint = org.mcqscanner.mcqscanner
 
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
 # In past, was `android.arch` as we weren't supporting builds for multiple archs at the same time.
-android.archs = arm64-v8a, armeabi-v7a
+#android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 
 # (int) overrides automatic versionCode computation (used in build.gradle)
 # this is not the same as app version and should only be edited if you know what you're doing
